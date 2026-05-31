@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>咖啡馆经营 - 赚钱游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        #game-container {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        #game-canvas {
+            width: 100%;
+            height: 600px;
+            display: block;
+            background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        .ui-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 15px;
+            background: #fafafa;
+            border-top: 1px solid #eee;
+        }
+        .stat-box {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #667eea;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 15px;
+            background: white;
+        }
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-action {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-action:active {
+            transform: scale(0.95);
+        }
+        .btn-shop {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .shop-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .shop-item-info h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .shop-item-price {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div class="ui-panel">
+            <div class="stat-box">
+                <div class="stat-label">💰 金币</div>
+                <div class="stat-value" id="coins-display">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">⭐ 等级</div>
+                <div class="stat-value" id="level-display">1</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">☕ 咖啡</div>
+                <div class="stat-value" id="coffee-display">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">👥 顾客</div>
+                <div class="stat-value" id="customers-display">0</div>
+            </div>
+        </div>
+        <div class="button-group">
+            <button class="btn-action" id="serve-btn">☕ 服务顾客</button>
+            <button class="btn-action" id="upgrade-btn">⬆️ 升级咖啡机</button>
+            <button class="btn-shop" id="shop-btn">🛍️ 商城充值</button>
+            <button class="btn-action" id="save-btn">💾 保存进度</button>
+        </div>
+    </div>
+
+    <!-- 商城模态框 -->
+    <div id="shop-modal" class="modal">
+        <div class="modal-content">
+            <h2>💎 游戏商城</h2>
+            <p style="color: #999; margin-bottom: 20px;">充值金币，加速游戏进程</p>
+            <div id="shop-items-container"></div>
+            <button class="btn-action" style="width: 100%; margin-top: 20px;" onclick="document.getElementById('shop-modal').classList.remove('active')">关闭</button>
+        </div>
+    </div>
+
+    <script src="dist/bundle.js"></script>
+</body>
+</html>
